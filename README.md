@@ -31,6 +31,7 @@ $ sudo dnf update -y
 
 
 ## Set the hostname (use your actual FQDN)
+Set up the hostname like the one below for experimental or use a qualified domain for production
 ```bash
 $ sudo hostnamectl set-hostname ipa-server.lab.local
 ```
@@ -41,8 +42,21 @@ $ sudo hostnamectl set-hostname ipa-server.lab.local
 
 ---
 
-
+ 
 ## Enable and start the firewall service
+Before configuring network services like FreeIPA,DNS, or LDAP, It is important to make sure your firewall service is active.
+The firewall protect your server by controlling which network port is open or closed - This is helpful because it allow only trusted services to communicate.
+
+
+By default, Some linux system may have the firewaall disable, Which can expose your server to unwanted connections
+Enabling and starting ensures your system follows good security practices and that any network services
+that you configure (like FreeIPA, HTTP, or Kerberos) can be safely managed through defined firewall rules.
+
+## Benefits of this:
+1. Improved security sysstem - It prevent unauthorized access
+2. Allow conrolled access - Only required ports are opened
+3. Ensure compatibility - FREEIPA and other services rely on specific ports
+4. Avoids installation issues - Some setup fails if the firewall is inactive
 ```bash
 $ sudo systemctl enable --now firewalld
 $ sudo systemctl start firewalld
@@ -54,7 +68,7 @@ $ sudo systemctl start firewalld
 ---
 
 Sometimes you might encounter an error after running those command due to firewall services not recognised like the one above,
-This is something fixable trough nano or vi  the preistall editor
+This is something fixable trough nano or vi  the preinstall editor
 1. Nano you just run this command and enter the xml file below
 ```bash
 $ sudo nano /etc/firewalld/services/freeipa-server.xml
@@ -67,6 +81,10 @@ $ sudo vi /etc/firewalld/services/freeipa-server.xml
 ```
 This is the xml file that should be enter in either of the editors i mention above
 sudo tee /etc/firewalld/services/freeipa-server.xml > /dev/null <<EOF
+
+---
+
+```xml
 <?xml version="1.0" encoding="utf-8"?>
 <service>
   <short>FreeIPA Server</short>
@@ -83,6 +101,7 @@ sudo tee /etc/firewalld/services/freeipa-server.xml > /dev/null <<EOF
   <port protocol="udp" port="53"/>
 </service>
 EOF
+```
 
 How to save on vi editor
 - Press i "you'll will see --INSERT MODE"
