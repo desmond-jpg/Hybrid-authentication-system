@@ -171,6 +171,15 @@ Once installation completes, authenticate and perform a basic check.
 
 
 ## Get a Kerberos ticket for the 'admin' user
+Once the installation is complete and services are running, It's time to verify the authentication
+and directory access is working
+
+FreeIPA uses Kerberos for authentication and LDAP for user data storage.
+The following steps confirm that both are functioning as expected.
+
+You would be promted to enter the password you created during the setup
+If authentication is successful, Kinit obtain Kerberos Ticket-Granting-Ticket
+
 ```bash
 $ kinit admin
 ```
